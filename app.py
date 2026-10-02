@@ -16,7 +16,7 @@ PAGE = """
  .card{margin-top:20px;padding:16px;border:1px solid #ddd;border-radius:8px}
  .err{color:#b00020;margin-top:16px}
 </style>
-<h1>Current weather</h1>
+<h1>la meteo</h1>
 <form method="get" action="/">
   <input name="city" placeholder="e.g. London,GB" value="{{ city or '' }}">
   <button type="submit">Search</button>
