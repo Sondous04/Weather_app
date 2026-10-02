@@ -1,4 +1,4 @@
-name: CI
+name: CI-CD
 on:
   push:
     branches: [main]
@@ -14,3 +14,20 @@ jobs:
           python-version: "3.11"
       - run: pip install -r requirements.txt
       - run: pytest -v
+
+  deploy:
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: eu-north-1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install awsebcli
+      - run: eb init -p python-3.11 weather-app --region eu-north-1
+      - run: eb deploy weather-env
